@@ -222,7 +222,7 @@ def ollama_pt(
                                 images.append(m["image_url"])
                             elif isinstance(m["image_url"], dict):
                                 images.append(m["image_url"]["url"])
-                        elif m.get("type", "") == "text":
+                        elif m.get("type", "") == "text" and len(m.get("text", "")) > 0:
                             user_content_str += m["text"]
                 else:
                     # Tool message content will always be a string
@@ -1112,7 +1112,7 @@ def anthropic_messages_pt_xml(messages: list):
                                     },
                                 }
                             )
-                    elif m.get("type", "") == "text":
+                    elif m.get("type", "") == "text" and len(m.get("text", "")) > 0:
                         user_content.append({"type": "text", "text": m["text"]})
             else:
                 # Tool message content will always be a string
@@ -2421,7 +2421,7 @@ def anthropic_messages_pt(  # noqa: PLR0915
                                     "cache_control"
                                 ] = _content_element["cache_control"]
                             user_content.append(_anthropic_content_element)
-                        elif m.get("type", "") == "text":
+                        elif m.get("type", "") == "text" and len(m.get("text", "")) > 0:
                             m = cast(ChatCompletionTextObject, m)
                             _anthropic_text_content_element = (
                                 AnthropicMessagesTextParam(
@@ -2446,7 +2446,7 @@ def anthropic_messages_pt(  # noqa: PLR0915
                                     cast(ChatCompletionFileObject, m)
                                 )
                             )
-                elif isinstance(user_message_types_block["content"], str):
+                elif isinstance(user_message_types_block["content"], str) and len(user_message_types_block["content"]) > 0:
                     _anthropic_content_text_element: AnthropicMessagesTextParam = {
                         "type": "text",
                         "text": user_message_types_block["content"],
